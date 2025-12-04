@@ -14,6 +14,7 @@ const frases_practica = [
     "Con tus habilidades actuales, estás preparado para desafíos mayores. ¡Adelante!",
     "Excelente capacidad detectada. Te propongo empezar con los ejercicios más difíciles."
 ];
+const recommended_level = ["Basico", "Intermedio", "Avanzado"];
 
 // Falta implementar la respuesta a Moodle
 
@@ -26,21 +27,32 @@ aprendeformativaController.registrarPruebasFormativas = async (req, res) => {
         console.log('Datos recibidos desde Moodle para pruebas formativas:', JSON.stringify(req.body, null, 2));
 
 
-        const { userid, courseid, evaluations } = req.body;
+        const { userid, courseid, moduleid, evaluations } = req.body;
         // Crear un registro de pruebas formativas.
         const nuevasPruebasFormativas = new AprendeFormativa({
             userid,
             courseid,
+            moduleid,
             evaluations
         });
 
         // Guardar las pruebas formativas.
         await nuevasPruebasFormativas.save();
 
-        // Seleccionar una frase aleatoria y responder
+        // Seleccionar una frase aleatoria y nivel
         const fraseAleatoria = frases_practica[Math.floor(Math.random() * frases_practica.length)];
-        console.log('Mensaje enviado:', fraseAleatoria);
-        res.status(200).json({ message: fraseAleatoria });
+        const nivelAleatorio = recommended_level[Math.floor(Math.random() * recommended_level.length)];
+
+        // Enviar respuesta a Moodle en JSON 
+        const respuestaMoodle = {
+            userid: userid,
+            courseid: courseid,
+            feedback_message: fraseAleatoria,
+            recommended_level: nivelAleatorio   
+        };
+        
+        console.log('Mensaje enviado:', respuestaMoodle);
+        res.status(200).json({ message: respuestaMoodle });
     }catch (error) {
         console.error('Error al registrar las pruebas formativas:', error);
         res.status(500).json({message: 'Error al registrar las pruebas formativas'});

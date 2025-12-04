@@ -1,6 +1,7 @@
 //Importar modelos
+
 const Diagnostico = require('../models/Diagnostico');
-const EstiloHistorico = require('../models/EstiloHistorico');
+const {EstiloHistorico} = require('../models/EstiloHistorico');
 
 //Controlador de diagnostico
 const diagnosticoController = {};
@@ -27,8 +28,8 @@ diagnosticoController.registrarDiagnostico = async (req, res
             userid: userid,
             courseid: courseid,
             learning_styles: {
-                visual: 0.1,
-                auditory: 0.7,
+                visual: 0.5,
+                auditory: 0.3,
                 textual: 0.1,
                 kinesthetic: 0.1
             },
